@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter, usePathname } from 'next/navigation'
-import { Menu, X, User, Search, Home, Newspaper, Layers, LogOut } from 'lucide-react'
+import { Menu, X, User, Search, Home, Newspaper, Layers, LogOut, LogIn } from 'lucide-react'
 import LanguageSwitcher from './LanguageSwitcher'
 import { supabase } from '@/lib/supabase'
 
@@ -100,7 +100,7 @@ export default function Header({ propLang }) {
             {/* Logo */}
             <Link 
               href={`/${lang}`} 
-              className="text-xl md:text-2xl lg:text-3xl font-bold text-red-600 hover:text-red-700 transition truncate"
+              className="text-xl md:text-2xl lg:text-3xl font-bold text-red-600 hover:text-red-700 transition truncate flex-1"
             >
               {lang === 'bn' ? 'দৈনিক ক্রনিকল' : 'Daily Chronicle'}
             </Link>
@@ -173,14 +173,41 @@ export default function Header({ propLang }) {
               )}
             </div>
             
-            {/* Mobile Menu Button */}
-            <button 
-              className="lg:hidden tap-target p-2 hover:bg-gray-100 rounded-lg transition" 
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Menu"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Mobile Right Section - Always visible */}
+            <div className="flex lg:hidden items-center gap-2">
+              {/* Mobile Search Button */}
+              <button className="tap-target p-2 hover:bg-gray-100 rounded-full transition">
+                <Search size={20} />
+              </button>
+              
+              {/* Mobile Sign In/User Button - ALWAYS VISIBLE */}
+              {!loading && (
+                user ? (
+                  <Link
+                    href={`/${lang}/admin`}
+                    className="tap-target p-2 hover:bg-gray-100 rounded-full transition"
+                  >
+                    <User size={20} className="text-red-600" />
+                  </Link>
+                ) : (
+                  <Link
+                    href={`/${lang}/auth`}
+                    className="bg-red-600 text-white px-3 py-1.5 rounded-lg hover:bg-red-700 transition text-sm font-medium"
+                  >
+                    {lang === 'bn' ? 'লগইন' : 'Login'}
+                  </Link>
+                )
+              )}
+              
+              {/* Mobile Menu Button */}
+              <button 
+                className="tap-target p-2 hover:bg-gray-100 rounded-lg transition" 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Menu"
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -199,7 +226,7 @@ export default function Header({ propLang }) {
         
         {/* Menu Panel */}
         <div className="relative w-4/5 max-w-sm h-full bg-white shadow-xl overflow-y-auto">
-          {/* User Section */}
+          {/* User Section - Mobile */}
           <div className="p-4 border-b bg-gradient-to-r from-red-50 to-orange-50">
             {!loading && user ? (
               <div className="flex items-center gap-3">
@@ -212,13 +239,18 @@ export default function Header({ propLang }) {
                 </div>
               </div>
             ) : (
-              <Link
-                href={`/${lang}/auth`}
-                className="block w-full text-center bg-red-600 text-white px-4 py-2 rounded-lg"
-                onClick={closeMenu}
-              >
-                {lang === 'bn' ? 'সাইন ইন করুন' : 'Sign In'}
-              </Link>
+              <div>
+                <p className="text-sm text-gray-600 mb-2">
+                  {lang === 'bn' ? 'সংবাদ পড়তে লগইন করুন' : 'Login to read news'}
+                </p>
+                <Link
+                  href={`/${lang}/auth`}
+                  className="block w-full text-center bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+                  onClick={closeMenu}
+                >
+                  {lang === 'bn' ? 'সাইন ইন করুন' : 'Sign In'}
+                </Link>
+              </div>
             )}
           </div>
           
@@ -244,11 +276,11 @@ export default function Header({ propLang }) {
             })}
           </nav>
           
-          {/* Admin Links for Mobile */}
+          {/* Admin Links for Mobile (only if logged in) */}
           {user && (
             <div className="p-4 border-t">
-              <p className="text-xs text-gray-500 uppercase mb-2">
-                {lang === 'bn' ? 'প্রশাসনিক' : 'Admin'}
+              <p className="text-xs text-gray-500 uppercase mb-2 tracking-wider">
+                {lang === 'bn' ? 'প্রশাসনিক এলাকা' : 'Admin Area'}
               </p>
               <Link
                 href={`/${lang}/admin`}
@@ -276,6 +308,9 @@ export default function Header({ propLang }) {
           
           {/* Language Switcher for Mobile */}
           <div className="p-4 border-t">
+            <p className="text-xs text-gray-500 uppercase mb-2 tracking-wider">
+              {lang === 'bn' ? 'ভাষা' : 'Language'}
+            </p>
             <LanguageSwitcher currentLang={lang} />
           </div>
         </div>
