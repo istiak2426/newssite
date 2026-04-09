@@ -107,15 +107,14 @@ export default function Header({ propLang }) {
       }`}>
         <div className="container-custom">
           <div className="flex justify-between items-center py-3 md:py-4">
-            {/* Logo */}
-<Link 
-  href={`/${lang}`} 
-  className={`text-xl md:text-2xl lg:text-3xl font-bold text-red-600 hover:text-red-700 transition truncate flex-1 ${
-    lang === 'bn' ? 'font-bangla' : ''
-  }`}
->
-  {lang === 'bn' ? 'দৈনিক ক্রনিকল' : 'Daily Chronicle'}
-</Link>
+            {/* Logo - Fixed for cropping issue */}
+            <Link 
+              href={`/${lang}`} 
+              className="text-xl md:text-2xl lg:text-3xl font-bold text-red-600 hover:text-red-700 transition flex-shrink-0 overflow-visible leading-normal py-1"
+              style={{ lineHeight: '1.3', display: 'inline-block' }}
+            >
+              {lang === 'bn' ? 'দৈনিক ক্রনিকল' : 'Daily Chronicle'}
+            </Link>
             
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex space-x-6">
@@ -212,8 +211,8 @@ export default function Header({ propLang }) {
           onClick={closeMenu}
         />
         
-        {/* Menu Panel - Added pb-20 for bottom padding to prevent content being blocked */}
-        <div className="relative w-4/5 max-w-sm h-full bg-white shadow-xl overflow-y-auto pb-20">
+        {/* Menu Panel */}
+        <div className="relative w-4/5 max-w-sm h-full bg-white shadow-xl overflow-y-auto pb-32">
           
           {/* Search Section - Inside Hamburger */}
           <div className="p-4 border-b bg-gray-50 sticky top-0 bg-gray-50 z-10">
@@ -240,17 +239,17 @@ export default function Header({ propLang }) {
             {!loading && user ? (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
                     <User className="w-5 h-5 text-white" />
                   </div>
-                  <div>
-                    <p className="font-semibold">{user.email?.split('@')[0]}</p>
-                    <p className="text-xs text-gray-500">{user.email}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold truncate">{user.email?.split('@')[0]}</p>
+                    <p className="text-xs text-gray-500 truncate">{user.email}</p>
                   </div>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="text-red-600 hover:bg-red-100 p-2 rounded-lg transition"
+                  className="text-red-600 hover:bg-red-100 p-2 rounded-lg transition flex-shrink-0"
                 >
                   <LogOut size={20} />
                 </button>
@@ -295,7 +294,7 @@ export default function Header({ propLang }) {
                   } ${lang === 'bn' ? 'font-bangla' : ''}`}
                   onClick={closeMenu}
                 >
-                  <Icon size={20} />
+                  <Icon size={20} className="flex-shrink-0" />
                   <span>{item.name}</span>
                 </Link>
               )
@@ -313,20 +312,20 @@ export default function Header({ propLang }) {
                 className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition"
                 onClick={closeMenu}
               >
-                📊 {lang === 'bn' ? 'ড্যাশবোর্ড' : 'Dashboard'}
+                📊 <span>{lang === 'bn' ? 'ড্যাশবোর্ড' : 'Dashboard'}</span>
               </Link>
               <Link
                 href={`/${lang}/admin/new-article`}
                 className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition"
                 onClick={closeMenu}
               >
-                ✍️ {lang === 'bn' ? 'নতুন আর্টিকেল' : 'New Article'}
+                ✍️ <span>{lang === 'bn' ? 'নতুন আর্টিকেল' : 'New Article'}</span>
               </Link>
             </div>
           )}
           
-          {/* Extra padding at the bottom to ensure last item is visible */}
-          <div className="h-4"></div>
+          {/* Extra padding at the bottom */}
+          <div className="h-8"></div>
         </div>
       </div>
     </>
