@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter, usePathname } from 'next/navigation'
-import { Menu, X, User, Search, Home, Newspaper, Layers, LogOut, LogIn, Globe, ChevronDown } from 'lucide-react'
+import { Menu, X, User, Search, Home, Newspaper, Layers, LogOut, LogIn } from 'lucide-react'
 import LanguageSwitcher from './LanguageSwitcher'
 import { supabase } from '@/lib/supabase'
 
@@ -17,6 +17,7 @@ export default function Header({ propLang }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [scrolled, setScrolled] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   
   const navigation = {
     bn: [
@@ -37,23 +38,18 @@ export default function Header({ propLang }) {
     ]
   }
   
-  // For mobile bottom navigation - show only 4-5 most important items
-  const mobileBottomNav = {
-    bn: navigation.bn.slice(0, 4), // Show first 4 items on bottom bar
-    en: navigation.en.slice(0, 4)
-  }
-  
   const navItems = navigation[lang] || navigation.bn
-  const mobileNavItems = mobileBottomNav[lang] || mobileBottomNav.bn
   
   useEffect(() => {
     checkUser()
     
+    // Handle scroll effect
     const handleScroll = () => {
       setScrolled(window.scrollY > 10)
     }
     window.addEventListener('scroll', handleScroll)
     
+    // Prevent body scroll when mobile menu is open
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden'
     } else {
@@ -91,6 +87,15 @@ export default function Header({ propLang }) {
     setIsMenuOpen(false)
     router.push(`/${lang}`)
     router.refresh()
+  }
+  
+  const handleSearch = (e) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      router.push(`/${lang}/search?q=${encodeURIComponent(searchQuery)}`)
+      setIsMenuOpen(false)
+      setSearchQuery('')
+    }
   }
   
   const closeMenu = () => setIsMenuOpen(false)
@@ -178,36 +183,9 @@ export default function Header({ propLang }) {
               )}
             </div>
             
-            {/* Mobile Right Section - Now with ALL options */}
+            {/* Mobile Header - Only Menu Button */}
             <div className="flex lg:hidden items-center gap-2">
-              {/* Mobile Search Button */}
-              <button className="tap-target p-2 hover:bg-gray-100 rounded-full transition">
-                <Search size={20} />
-              </button>
-              
-              {/* Mobile Language Switcher - NOW INCLUDED */}
-              <LanguageSwitcher currentLang={lang} />
-              
-              {/* Mobile Sign In/User Button */}
-              {!loading && (
-                user ? (
-                  <Link
-                    href={`/${lang}/admin`}
-                    className="tap-target p-2 hover:bg-gray-100 rounded-full transition"
-                  >
-                    <User size={20} className="text-red-600" />
-                  </Link>
-                ) : (
-                  <Link
-                    href={`/${lang}/auth`}
-                    className="bg-red-600 text-white px-3 py-1.5 rounded-lg hover:bg-red-700 transition text-sm font-medium whitespace-nowrap"
-                  >
-                    {lang === 'bn' ? 'লগইন' : 'Login'}
-                  </Link>
-                )
-              )}
-              
-              {/* Mobile Menu Button */}
+              {/* Mobile Menu Button - Only this */}
               <button 
                 className="tap-target p-2 hover:bg-gray-100 rounded-lg transition" 
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -220,40 +198,7 @@ export default function Header({ propLang }) {
         </div>
       </header>
       
-      {/* Mobile Bottom Navigation Bar - ADD THIS FOR BETTER MOBILE EXPERIENCE */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40">
-        <div className="flex justify-around items-center px-2 py-2">
-          {mobileNavItems.map((item) => {
-            const Icon = item.icon
-            const isActive = pathname === item.href || pathname?.startsWith(item.href + '/')
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`flex flex-col items-center gap-1 px-3 py-1 rounded-lg transition ${
-                  isActive 
-                    ? 'text-red-600' 
-                    : 'text-gray-600 hover:text-red-600'
-                }`}
-              >
-                <Icon size={20} />
-                <span className="text-xs">{item.name}</span>
-              </Link>
-            )
-          })}
-          
-          {/* More button to open full menu */}
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="flex flex-col items-center gap-1 px-3 py-1 rounded-lg text-gray-600 hover:text-red-600 transition"
-          >
-            <Menu size={20} />
-            <span className="text-xs">{lang === 'bn' ? 'আরও' : 'More'}</span>
-          </button>
-        </div>
-      </div>
-      
-      {/* Mobile Slide-out Menu */}
+      {/* Mobile Slide-out Menu with ALL options inside */}
       <div className={`fixed inset-0 z-40 lg:hidden transition-transform duration-300 ease-in-out ${
         isMenuOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
@@ -265,19 +210,48 @@ export default function Header({ propLang }) {
           onClick={closeMenu}
         />
         
-        {/* Menu Panel */}
+        {/* Menu Panel - Added pb-20 for bottom padding to prevent content being blocked */}
         <div className="relative w-4/5 max-w-sm h-full bg-white shadow-xl overflow-y-auto pb-20">
-          {/* User Section - Mobile */}
+          
+          {/* Search Section - Inside Hamburger */}
+          <div className="p-4 border-b bg-gray-50 sticky top-0 bg-gray-50 z-10">
+            <form onSubmit={handleSearch} className="relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={lang === 'bn' ? 'খুঁজুন...' : 'Search...'}
+                className="w-full pl-10 pr-20 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              />
+              <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
+              <button
+                type="submit"
+                className="absolute right-2 top-1.5 px-3 py-1 bg-red-600 text-white rounded-md text-sm hover:bg-red-700 transition"
+              >
+                {lang === 'bn' ? 'খুঁজুন' : 'Go'}
+              </button>
+            </form>
+          </div>
+          
+          {/* User Section - Inside Hamburger */}
           <div className="p-4 border-b bg-gradient-to-r from-red-50 to-orange-50">
             {!loading && user ? (
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
-                  <User className="w-5 h-5 text-white" />
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
+                    <User className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-semibold">{user.email?.split('@')[0]}</p>
+                    <p className="text-xs text-gray-500">{user.email}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-semibold">{user.email?.split('@')[0]}</p>
-                  <p className="text-xs text-gray-500">{user.email}</p>
-                </div>
+                <button
+                  onClick={handleLogout}
+                  className="text-red-600 hover:bg-red-100 p-2 rounded-lg transition"
+                >
+                  <LogOut size={20} />
+                </button>
               </div>
             ) : (
               <div>
@@ -286,16 +260,25 @@ export default function Header({ propLang }) {
                 </p>
                 <Link
                   href={`/${lang}/auth`}
-                  className="block w-full text-center bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+                  className="flex items-center justify-center gap-2 w-full text-center bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
                   onClick={closeMenu}
                 >
+                  <LogIn size={18} />
                   {lang === 'bn' ? 'সাইন ইন করুন' : 'Sign In'}
                 </Link>
               </div>
             )}
           </div>
           
-          {/* Navigation Links - ALL ITEMS */}
+          {/* Language Switcher - Inside Hamburger */}
+          <div className="p-4 border-b">
+            <p className="text-xs text-gray-500 uppercase mb-2 tracking-wider">
+              {lang === 'bn' ? 'ভাষা নির্বাচন' : 'Select Language'}
+            </p>
+            <LanguageSwitcher currentLang={lang} />
+          </div>
+          
+          {/* Navigation Links */}
           <nav className="p-4 space-y-1">
             {navItems.map((item) => {
               const Icon = item.icon
@@ -319,7 +302,7 @@ export default function Header({ propLang }) {
           
           {/* Admin Links for Mobile (only if logged in) */}
           {user && (
-            <div className="p-4 border-t">
+            <div className="p-4 border-t mb-4">
               <p className="text-xs text-gray-500 uppercase mb-2 tracking-wider">
                 {lang === 'bn' ? 'প্রশাসনিক এলাকা' : 'Admin Area'}
               </p>
@@ -337,34 +320,13 @@ export default function Header({ propLang }) {
               >
                 ✍️ {lang === 'bn' ? 'নতুন আর্টিকেল' : 'New Article'}
               </Link>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-3 w-full px-3 py-3 rounded-lg text-red-600 hover:bg-red-50 transition"
-              >
-                <LogOut size={20} />
-                {lang === 'bn' ? 'লগআউট' : 'Logout'}
-              </button>
             </div>
           )}
           
-          {/* Language Switcher for Mobile */}
-          <div className="p-4 border-t">
-            <p className="text-xs text-gray-500 uppercase mb-2 tracking-wider">
-              {lang === 'bn' ? 'ভাষা' : 'Language'}
-            </p>
-            <LanguageSwitcher currentLang={lang} />
-          </div>
+          {/* Extra padding at the bottom to ensure last item is visible */}
+          <div className="h-4"></div>
         </div>
       </div>
-      
-      {/* Add bottom padding to main content to account for bottom nav on mobile */}
-      <style jsx global>{`
-        @media (max-width: 1023px) {
-          main {
-            padding-bottom: 70px;
-          }
-        }
-      `}</style>
     </>
   )
 }
