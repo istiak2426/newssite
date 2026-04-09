@@ -108,12 +108,14 @@ export default function Header({ propLang }) {
         <div className="container-custom">
           <div className="flex justify-between items-center py-3 md:py-4">
             {/* Logo */}
-            <Link 
-              href={`/${lang}`} 
-              className="text-xl md:text-2xl lg:text-3xl font-bold text-red-600 hover:text-red-700 transition truncate flex-1"
-            >
-              {lang === 'bn' ? 'দৈনিক ক্রনিকল' : 'Daily Chronicle'}
-            </Link>
+<Link 
+  href={`/${lang}`} 
+  className={`text-xl md:text-2xl lg:text-3xl font-bold text-red-600 hover:text-red-700 transition truncate flex-1 ${
+    lang === 'bn' ? 'font-bangla' : ''
+  }`}
+>
+  {lang === 'bn' ? 'দৈনিক ক্রনিকল' : 'Daily Chronicle'}
+</Link>
             
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex space-x-6">

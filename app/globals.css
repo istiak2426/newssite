@@ -196,3 +196,18 @@ img {
     @apply fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50;
   }
 }
+
+
+
+/* Bengali font support */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap');
+
+.font-bangla {
+  font-family: 'Noto Sans Bengali', 'Segoe UI', 'Arial', sans-serif;
+}
+
+/* For the logo specifically */
+.logo-text {
+  font-family: 'Noto Sans Bengali', 'Arial', sans-serif;
+  font-weight: 700;
+}
