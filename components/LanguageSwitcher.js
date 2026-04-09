@@ -87,10 +87,10 @@ export default function LanguageSwitcher({ currentLang }) {
                 currentLang === code ? 'bg-red-50 text-red-600' : 'text-gray-700'
               }`}
             >
-
+              <span className="text-xl">{flag}</span>
               <div className="flex flex-col">
                 <span className="text-sm font-medium">{name}</span>
-                <span className="text-xs text-gray-500">{label}</span>
+
               </div>
               {currentLang === code && (
                 <span className="ml-auto text-red-600">✓</span>
