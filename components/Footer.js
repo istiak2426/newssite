@@ -56,7 +56,7 @@ export default function Footer({ lang = 'bn' }) {
           {/* About Section */}
           <div>
             <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4">
-              {lang === 'bn' ? 'দৈনিক ক্রনিকল' : 'Daily Chronicle'}
+              {lang === 'bn' ? 'যাপিত জীবন' : 'Zapito Zibon'}
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed">
               {lang === 'bn' 
@@ -83,11 +83,11 @@ export default function Footer({ lang = 'bn' }) {
             <ul className="space-y-2 text-gray-400 text-sm">
               <li className="flex items-center gap-2">
                 <Phone size={14} />
-                <span>+880 1234 567890</span>
+                <span>+880 1748008483</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={14} />
-                <span>info@dailychronicle.com</span>
+                <span>zapitozibon@gmail.com</span>
               </li>
               <li className="flex items-center gap-2">
                 <MapPin size={14} />
