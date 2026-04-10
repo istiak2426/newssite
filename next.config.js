@@ -2,7 +2,7 @@
 const nextConfig = {
   images: {
     domains: [
-      'localhost',
+      'zapitozibon.vercel.app',
       'imnhzvldzxzxbcnklclk.supabase.co',  // Your exact Supabase domain
       '*.supabase.co'
     ],
