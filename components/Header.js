@@ -113,7 +113,7 @@ export default function Header({ propLang }) {
               className="text-xl md:text-2xl lg:text-3xl font-bold text-red-600 hover:text-red-700 transition flex-shrink-0 overflow-visible leading-normal py-1"
               style={{ lineHeight: '1.3', display: 'inline-block' }}
             >
-              {lang === 'bn' ? 'যাপিত জীবন' : 'Zapito Zibon'}
+              {lang === 'bn' ? 'দৈনিক অভিমত' : 'Dianik Ovimot'}
             </Link>
             
             {/* Desktop Navigation */}
