@@ -43,13 +43,11 @@ export default function Header({ propLang }) {
   useEffect(() => {
     checkUser()
     
-    // Handle scroll effect
     const handleScroll = () => {
       setScrolled(window.scrollY > 10)
     }
     window.addEventListener('scroll', handleScroll)
     
-    // Prevent body scroll when mobile menu is open
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden'
     } else {
@@ -107,7 +105,6 @@ export default function Header({ propLang }) {
       }`}>
         <div className="container-custom">
           <div className="flex justify-between items-center py-3 md:py-4">
-            {/* Logo - Fixed for cropping issue */}
             <Link 
               href={`/${lang}`} 
               className="text-xl md:text-2xl lg:text-3xl font-bold text-red-600 hover:text-red-700 transition flex-shrink-0 overflow-visible leading-normal py-1"
@@ -116,7 +113,6 @@ export default function Header({ propLang }) {
               {lang === 'bn' ? 'দৈনিক অভিমত' : 'Doinik Ovimot'}
             </Link>
             
-            {/* Desktop Navigation */}
             <nav className="hidden lg:flex space-x-6">
               {navItems.map((item) => (
                 <Link
@@ -131,7 +127,6 @@ export default function Header({ propLang }) {
               ))}
             </nav>
             
-            {/* Desktop Right Section */}
             <div className="hidden lg:flex items-center space-x-3">
               <button className="tap-target p-2 hover:bg-gray-100 rounded-full transition">
                 <Search size={20} />
@@ -184,9 +179,7 @@ export default function Header({ propLang }) {
               )}
             </div>
             
-            {/* Mobile Header - Only Menu Button */}
             <div className="flex lg:hidden items-center gap-2">
-              {/* Mobile Menu Button - Only this */}
               <button 
                 className="tap-target p-2 hover:bg-gray-100 rounded-lg transition" 
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -199,11 +192,9 @@ export default function Header({ propLang }) {
         </div>
       </header>
       
-      {/* Mobile Slide-out Menu with ALL options inside */}
       <div className={`fixed inset-0 z-40 lg:hidden transition-transform duration-300 ease-in-out ${
         isMenuOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
-        {/* Backdrop */}
         <div 
           className={`absolute inset-0 bg-black transition-opacity duration-300 ${
             isMenuOpen ? 'opacity-50' : 'opacity-0 pointer-events-none'
@@ -211,10 +202,7 @@ export default function Header({ propLang }) {
           onClick={closeMenu}
         />
         
-        {/* Menu Panel */}
         <div className="relative w-4/5 max-w-sm h-full bg-white shadow-xl overflow-y-auto pb-32">
-          
-          {/* Search Section - Inside Hamburger */}
           <div className="p-4 border-b bg-gray-50 sticky top-0 bg-gray-50 z-10">
             <form onSubmit={handleSearch} className="relative">
               <input
@@ -234,7 +222,6 @@ export default function Header({ propLang }) {
             </form>
           </div>
           
-          {/* User Section - Inside Hamburger */}
           <div className="p-4 border-b bg-gradient-to-r from-red-50 to-orange-50">
             {!loading && user ? (
               <div className="flex items-center justify-between">
@@ -271,7 +258,6 @@ export default function Header({ propLang }) {
             )}
           </div>
           
-          {/* Language Switcher - Inside Hamburger */}
           <div className="p-4 border-b">
             <p className="text-xs text-gray-500 uppercase mb-2 tracking-wider">
               {lang === 'bn' ? 'ভাষা নির্বাচন' : 'Select Language'}
@@ -279,7 +265,6 @@ export default function Header({ propLang }) {
             <LanguageSwitcher currentLang={lang} />
           </div>
           
-          {/* Navigation Links */}
           <nav className="p-4 space-y-1">
             {navItems.map((item) => {
               const Icon = item.icon
@@ -301,7 +286,6 @@ export default function Header({ propLang }) {
             })}
           </nav>
           
-          {/* Admin Links for Mobile (only if logged in) */}
           {user && (
             <div className="p-4 border-t mb-4">
               <p className="text-xs text-gray-500 uppercase mb-2 tracking-wider">
@@ -324,7 +308,6 @@ export default function Header({ propLang }) {
             </div>
           )}
           
-          {/* Extra padding at the bottom */}
           <div className="h-8"></div>
         </div>
       </div>
