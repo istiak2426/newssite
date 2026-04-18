@@ -64,10 +64,6 @@ export default function Footer({ lang = 'bn' }) {
                 : 'Committed to truth and accurate news. Unbiased news for everyone.'}
             </p>
 
-            {/* Founder Info (Trust Boost) */}
-            <p className="text-gray-500 text-xs mt-3">
-              Founder: Istiak Shanto
-            </p>
           </div>
 
           {/* Quick Links */}
