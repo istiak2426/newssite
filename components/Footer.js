@@ -111,7 +111,7 @@ export default function Footer({ lang = 'bn' }) {
 
               <li className="flex items-center gap-2">
                 <Phone size={14} />
-                <span>+880168352291</span>
+                <span>+8801748008483</span>
               </li>
 
               <li className="flex items-center gap-2">
