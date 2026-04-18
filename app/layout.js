@@ -4,7 +4,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Dainik Obhimot - Your Trusted News Source',
+  title: 'Doinik Obhimot - Your Trusted News Source',
   description: 'Latest news, breaking stories, and in-depth analysis',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes',
 }
