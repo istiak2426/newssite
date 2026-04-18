@@ -56,7 +56,7 @@ export default function Footer({ lang = 'bn' }) {
           {/* About Section */}
           <div>
             <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-4">
-              {lang === 'bn' ? 'যাপিত জীবন' : 'Zapito Zibon'}
+              {lang === 'bn' ? 'দৈনিক অভিমত' : 'Dainik Obhimot'}
             </h3>
             <p className="text-gray-400 text-sm leading-relaxed">
               {lang === 'bn' 
